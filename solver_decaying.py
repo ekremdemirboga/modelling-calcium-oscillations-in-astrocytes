@@ -15,36 +15,27 @@ k_p = 0.3
 k_deg = 0.08
 k_out = 0.5
 k_f = 0.5
-n = 2.02
-m = 2.2
+n = 2
+m = 2
 X0 = 0.1
 Y0 = 1.5
 Z0 = 0.1
 
-parameters = [vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, 
-              k_ip3, k_p, k_deg, k_out, k_f, n, m]
-
-
-    
-
-
 def RHS(t,R):
     ## caclulates the RHS of the equation 28 in the https://www.sciencedirect.com/science/article/pii/S0022519307006510?via%3Dihub.
     # INPUTS 
-    ## parameters: constants of the ODE
     ## t: time  
     ## R = (X, Y, Z) where
     # OUTPUTS 
     ## f = (f1, f2, f3) where
-    ## f#'s are the RHS of the equation
-    
+    ## f#'s are the RHS of the equation 
     
     X = R[0]
     Y = R[1]
     Z = R[2]
     
-    v_serca = (vm2 * X**2) / (X**2 + k_2 **2)    
-    v_PLC = (v_p * X**2) / (X**2 + k_p **2) 
+    v_serca = vm2 * X**2 / (X**2 + k_2 **2)    
+    v_PLC = v_p * X**2 / (X**2 + k_2 **2) 
     v_CICR = 4*vm3*(k_CaA**n * X**n / ( (X**n + k_CaA**n)*(X**n + k_CaI**n) ) )*(Z**m/(Z**m + k_ip3**m))*(Y-X)
     
     f1 = v_in - k_out*X + v_CICR - v_serca + k_f * (Y - X)
@@ -93,28 +84,25 @@ def evolve (t_initial, t_final, R, dt):
     return t_array,X_array,Y_array,Z_array
 
 
-
 if __name__ == '__main__':
     ## initial data
     R = np.array([X0,Y0,Z0])
 
     #parameters
-    t_initial = 1
+    t_initial = 0
     t_final = 600
-    dt = 1/64
+    dt = 1/32
 
     #main part
     time,X,Y,Z = evolve(t_initial, t_final, R, dt)
 
     #plotting orbit
     plt.figure()
-    plt.plot(time,X,'k',linewidth=3,label = 'X')
-    # plt.plot(time,Y,'r',linewidth=3,label = 'Y')
-    # plt.plot(time,Z,'g',linewidth=3,label = 'Z')
+    plt.plot(time,X,'k',linewidth=3)
     plt.xlabel(r"t", fontsize=14)
     plt.ylabel(r"X", fontsize=14)
     plt.grid(True)
-    # plt.legend(fancybox=True)
+    plt.legend(fancybox=True)
 
 
     plt.show()
