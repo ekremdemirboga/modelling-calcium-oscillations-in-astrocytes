@@ -2,33 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import scipy.constants as spc
 
-## Constants 
-vm2 = 15
-vm3 = 40
-v_in = 0.05
-v_p = 0.05
-k_2 = 0.1
-k_CaA = 0.15
-k_CaI = 0.15
-k_ip3 = 0.1
-k_p = 0.3
-k_deg = 0.08
-k_out = 0.5
-k_f = 0.5
-n = 2.02
-m = 2.2
-X0 = 0.1
-Y0 = 1.5
-Z0 = 0.1
 
-parameters = [vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, 
-              k_ip3, k_p, k_deg, k_out, k_f, n, m]
-
-
-    
-
-
-def RHS(t,R):
+def RHS(t,R,parameters):
     ## caclulates the RHS of the equation 28 in the https://www.sciencedirect.com/science/article/pii/S0022519307006510?via%3Dihub.
     # INPUTS 
     ## parameters: constants of the ODE
@@ -38,6 +13,7 @@ def RHS(t,R):
     ## f = (f1, f2, f3) where
     ## f#'s are the RHS of the equation
     
+    [vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, k_ip3, k_p, k_deg, k_out, k_f, n, m] = parameters
     
     X = R[0]
     Y = R[1]
@@ -55,16 +31,16 @@ def RHS(t,R):
     
     return f
 
-def rk4(t,R,RHS,dt):
+def rk4(t,R,RHS,dt,parameters):
     ## evolves one time step of RK4 scheme for the vector R(t) -> R(t+ dt)
-    k1 = dt*RHS(t,R)
-    k2 = dt*RHS(t+dt*0.5, R+k1*0.5)
-    k3 = dt*RHS(t+dt*0.5, R+k2*0.5)
-    k4 = dt*RHS(t+dt, R+k3)
+    k1 = dt*RHS(t,R, parameters)
+    k2 = dt*RHS(t+dt*0.5, R+k1*0.5, parameters)
+    k3 = dt*RHS(t+dt*0.5, R+k2*0.5, parameters)
+    k4 = dt*RHS(t+dt, R+k3, parameters)
     return (R + (k1 + 2*k2 + 2*k3 + k4)*(1/6))
 
 
-def evolve (t_initial, t_final, R, dt):
+def evolve (t_initial, t_final, R, dt, parameters):
     ## evolves the vector R from the initial time to the final time, R(t_initial) -> R(t_final)
     ## using rk4.
 
@@ -82,7 +58,7 @@ def evolve (t_initial, t_final, R, dt):
     
     ## evolve by iterating rk4 len(t_array)
     for i in range(1, len(t_array)):        
-        R_next = rk4(t,R,RHS,dt) ## main part
+        R_next = rk4(t,R,RHS,dt,parameters) ## main part
         # save the values and update R
         X_array[i] = R_next[0] 
         Y_array[i] = R_next[1]
@@ -95,8 +71,32 @@ def evolve (t_initial, t_final, R, dt):
 
 
 if __name__ == '__main__':
+    ##Reproducing the results from https://www.sciencedirect.com/science/article/pii/S0022519307006510?via%3Dihub
+    
+    ## Constants 
+    vm2 = 15
+    vm3 = 40
+    v_in = 0.05
+    v_p = 0.05
+    k_2 = 0.1
+    k_CaA = 0.15
+    k_CaI = 0.15
+    k_ip3 = 0.1
+    k_p = 0.3
+    k_deg = 0.08
+    k_out = 0.5
+    k_f = 0.5
+    n = 2.02
+    m = 2.2
+    parameters = np.array([vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, k_ip3, k_p, k_deg, k_out, k_f, n, m])
+    
+    #initial condition
+    X0 = 0.1
+    Y0 = 1.5
+    Z0 = 0.1
+    initial_conditions = np.array([X0,Y0,Z0])
     ## initial data
-    R = np.array([X0,Y0,Z0])
+    R = initial_conditions
 
     #parameters
     t_initial = 1
@@ -104,9 +104,9 @@ if __name__ == '__main__':
     dt = 1/64
 
     #main part
-    time,X,Y,Z = evolve(t_initial, t_final, R, dt)
+    time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters)
 
-    #plotting orbit
+    #plotting 
     plt.figure()
     plt.plot(time,X,'k',linewidth=3,label = 'X')
     # plt.plot(time,Y,'r',linewidth=3,label = 'Y')
