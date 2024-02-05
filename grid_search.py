@@ -38,7 +38,7 @@ def solve(parameters, initial_conditions, j):
     #simulation parameters
     t_initial = 1
     t_final = 600
-    dt = 1/64
+    dt = 1/128
 
     #main part
     time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters)
@@ -59,13 +59,15 @@ def solve(parameters, initial_conditions, j):
 if __name__ == '__main__':
     
     ## parameters
-    j = 0 ## j th component of the parameter vector is changed
+    j = 4 ## j th component of the parameter vector is changed
+    # k = 0 ## k th component of the intial condition is changed
     N = 20 ## constant that determines the range of search
-    h = parameters[j]
+    h1 = parameters[j]
+    # h2 = initial_conditions[k]
     
     for i in range(N):
-        parameters[j] = parameters[j] + h/N *(i)*(-1)**i
+        parameters[j] = parameters[j] + h1/N *(i)*(-1)**i
         solve(parameters, initial_conditions, j)
-        plt.pause(0.05)
+        plt.pause(0.01)
     plt.show()
         
