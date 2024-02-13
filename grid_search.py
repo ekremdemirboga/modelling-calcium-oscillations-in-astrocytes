@@ -2,24 +2,9 @@ from solver import RHS,rk4,evolve
 import numpy as np
 import matplotlib.pyplot as plt
 import scipy.constants as spc
+from matplotlib import colormaps
 
-## Parameters 
-vm2 = 20
-vm3 = 40
-v_in = 0.05
-v_p = 0.05
-k_2 = 0.1
-k_CaA = 0.15
-k_CaI = 0.15
-k_ip3 = 0.1
-k_p = 0.3
-k_deg = 0.08
-k_out = 0.5
-k_f = 0.5
-n = 2
-m = 2
-parameters = [vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, 
-              k_ip3, k_p, k_deg, k_out, k_f, n, m]
+number_of_parameters=13
 
 # initial conditions
 X0 = 0.1
@@ -28,9 +13,7 @@ Z0 = 0.1
 
 initial_conditions = np.array([X0,Y0,Z0])
 
-
-
-def solve(parameters, initial_conditions, j):
+def solve(parameters, initial_conditions, param_code , color_code, N):
     ## initial data
     R = initial_conditions
 
@@ -43,16 +26,18 @@ def solve(parameters, initial_conditions, j):
     time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters)
 
     #plotting 
+    cmap = colormaps.get_cmap('OrRd')
+    rgba = cmap(np.linspace(0.3,1,N))
     
-    plt.plot(time,X,linewidth=3,label = str(round(parameters[j], 2)))
+    plt.plot(time,X,color = rgba[color_code] ,linewidth=2,label = str(round(parameters[param_code], 2)))
     plt.xlabel(r"t", fontsize=14)
     plt.ylabel(r"X", fontsize=14)
     plt.grid(True)
-    # plt.title("parameter is "+ str(parameters[j]))
     
 def param_names(j):
-    [vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, 
-              k_ip3, k_p, k_deg, k_out, k_f, n, m]
+    # return the name of the jth parameter
+    # [vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, 
+    #           k_ip3, k_p, k_deg, k_out, k_f, n, m]
     if j==0:
         name = "vm2"
     elif j==1:
@@ -84,25 +69,52 @@ def param_names(j):
     else:
         print("invalid j")
     return name
-        
-        
+
+def param_init():
+    vm2 = 20
+    vm3 = 40
+    v_in = 0.05
+    v_p = 0.05
+    k_2 = 0.1
+    k_CaA = 0.15
+    k_CaI = 0.15
+    k_ip3 = 0.1
+    k_p = 0.3
+    k_deg = 0.08
+    k_out = 0.5
+    k_f = 0.5
+    n = 2
+    m = 2
+    params = [vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, 
+              k_ip3, k_p, k_deg, k_out, k_f, n, m]
+    return params
+
+def grid_search(param_code,N,saveflag=True, showFlag=False):
+    ## Makes a grid search for the parameter given by param_names(param_code)
+    # limits of search of parameters
+    parameters = param_init()
+    step = (parameters[param_code]/N)
+    start = parameters[param_code] - N*(step)/2
+    end = parameters[param_code] + N*(step)/2
+
+    save_loc = "plots/"
+    plt.figure()
+    for i in range(N):
+        parameters[param_code] = start + step*i
+        solve(parameters, initial_conditions, param_code, i, N)
+    plt.title("parameter: "+param_names(param_code))
+    plt.legend(fancybox=True)
+    plt.savefig(save_loc+"parameter-"+param_names(param_code)+".png")
+    parameters = param_init()  ## reseting the parameters
+    print(parameters)     
     
 if __name__ == '__main__':
     ## parameters
-    j = 1 ## j th component of the parameter vector is changed
-    N = 6 ## constant that determines the range of search
-    step = (parameters[j]/N)
-    start = parameters[j] - N*(step)/2
-    end = parameters[j] + N*(step)/2
+    #param_code = 1 ## th component of the parameter vector is changed
+    N = 8 ## constant that determines the range of search
+    save_flag = True
     
-    # k = 0 ## k th component of the intial condition is changed
-    # h2 = initial_conditions[k]
-    plt.figure()
-    for i in range(N):
-        parameters[j] = start + step*i
-        solve(parameters, initial_conditions, j)
-        # plt.pause(0.001)
-    plt.title("parameter: "+param_names(j))
-    plt.legend(fancybox=True)
-    plt.show()
-        
+    for param_code in range(number_of_parameters):
+        print("looking for parameter "+param_names(param_code))
+        grid_search(param_code,N,save_flag)
+    

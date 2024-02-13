@@ -1,0 +1,6 @@
+check the dimensions, units
+check convergence
+understand physics of the eqn
+understand data, ask nick 
+define a distance function
+find a way to minimize the function
