@@ -83,8 +83,8 @@ def param_init():
     k_deg = 0.08
     k_out = 0.5
     k_f = 0.5
-    n = 2
-    m = 2
+    n = 2.0
+    m = 2.2
     params = [vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, 
               k_ip3, k_p, k_deg, k_out, k_f, n, m]
     return params
