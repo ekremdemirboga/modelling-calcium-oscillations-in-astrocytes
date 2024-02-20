@@ -79,10 +79,10 @@ if __name__ == '__main__':
     v_in = 0.05
     v_p = 0.05
     k_2 = 0.1
-    k_CaA = 0.15
-    k_CaI = 0.15
+    k_CaA = 0.27
+    k_CaI = 0.27
     k_ip3 = 0.1
-    k_p = 0.3
+    k_p = 0.18
     k_deg = 0.08
     k_out = 0.5
     k_f = 0.5
@@ -100,8 +100,8 @@ if __name__ == '__main__':
 
     #parameters
     t_initial = 1
-    t_final = 600
-    dt = 1/64
+    t_final = 300
+    dt = 1/128
 
     #main part
     time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters)
