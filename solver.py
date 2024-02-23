@@ -25,7 +25,7 @@ def RHS(t,R,parameters):
     
     f1 = v_in - k_out*X + v_CICR - v_serca + k_f * (Y - X)
     f2 = v_serca - v_CICR - k_f * (Y- X)
-    f3 = v_PLC - k_deg * Z 
+    f3 = v_PLC - k_deg * Z
 
     f = np.array([f1, f2, f3])
     
@@ -74,15 +74,15 @@ if __name__ == '__main__':
     ##Reproducing the results from https://www.sciencedirect.com/science/article/pii/S0022519307006510?via%3Dihub
     
     ## Constants 
-    vm2 = 20
+    vm2 = 15
     vm3 = 40
-    v_in = 0.055
+    v_in = 0.05
     v_p = 0.05
     k_2 = 0.1
-    k_CaA = 0.27
-    k_CaI = 0.27
+    k_CaA = 0.08980548 
+    k_CaI = 0.12632319
     k_ip3 = 0.1
-    k_p = 0.164
+    k_p = 0.3
     k_deg = 0.08
     k_out = 0.5
     k_f = 0.5
@@ -91,7 +91,7 @@ if __name__ == '__main__':
     parameters = np.array([vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, k_ip3, k_p, k_deg, k_out, k_f, n, m])
     
     #initial condition
-    X0 = 0.1
+    X0 = 0.01
     Y0 = 1.5
     Z0 = 0.1
     initial_conditions = np.array([X0,Y0,Z0])
@@ -115,6 +115,10 @@ if __name__ == '__main__':
     plt.ylabel(r"X", fontsize=14)
     plt.grid(True)
     # plt.legend(fancybox=True)
+
+    plt.figure()
+    ax = plt.axes(projection='3d')
+    ax.plot3D(X, Y, Z, 'green')
 
 
     plt.show()

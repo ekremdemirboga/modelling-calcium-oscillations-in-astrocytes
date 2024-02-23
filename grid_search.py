@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import scipy.constants as spc
 from matplotlib import colormaps
 
-number_of_parameters=13
+number_of_parameters=14
 
 # initial conditions
 X0 = 0.1
@@ -13,7 +13,7 @@ Z0 = 0.1
 
 initial_conditions = np.array([X0,Y0,Z0])
 
-def solve(parameters, initial_conditions, param_code , color_code, N):
+def solve(parameters, initial_conditions, param_code , color_code, N,ax, attractor=False,):
     ## initial data
     R = initial_conditions
 
@@ -26,12 +26,18 @@ def solve(parameters, initial_conditions, param_code , color_code, N):
     time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters)
 
     #plotting 
-    cmap = colormaps.get_cmap('OrRd')
+    cmap = plt.get_cmap('OrRd')
     rgba = cmap(np.linspace(0.3,1,N))
     
-    plt.plot(time,X,color = rgba[color_code] ,linewidth=2,label = str(round(parameters[param_code], 2)))
-    plt.xlabel(r"t", fontsize=14)
-    plt.ylabel(r"X", fontsize=14)
+    if attractor == True:
+        ax.plot3D(X, Y, Z, color = rgba[color_code],label = str(round(parameters[param_code], 2)))
+        ax.set_xlabel('x', fontsize=12)
+        ax.set_ylabel('y', fontsize=12)
+        ax.set_zlabel('z', fontsize=12)
+    else:        
+        plt.plot(time,X,color = rgba[color_code] ,linewidth=2,label = str(round(parameters[param_code], 2)))
+        plt.xlabel(r"t", fontsize=14)
+        plt.ylabel(r"X", fontsize=14)
     plt.grid(True)
     
 def param_names(j):
@@ -71,7 +77,7 @@ def param_names(j):
     return name
 
 def param_init():
-    vm2 = 20
+    vm2 = 15
     vm3 = 40
     v_in = 0.05
     v_p = 0.05
@@ -87,9 +93,9 @@ def param_init():
     m = 2.2
     params = [vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, 
               k_ip3, k_p, k_deg, k_out, k_f, n, m]
-    return params
+    return np.asarray(params)
 
-def grid_search(param_code,N,saveflag=True, showFlag=False):
+def grid_search(param_code,N,saveflag=True):
     ## Makes a grid search for the parameter given by param_names(param_code)
     # limits of search of parameters
     parameters = param_init()
@@ -97,21 +103,31 @@ def grid_search(param_code,N,saveflag=True, showFlag=False):
     start = parameters[param_code] - N*(step)/2
     end = parameters[param_code] + N*(step)/2
 
+    Attractor = True
     save_loc = "plots/"
+
     plt.figure()
+    if Attractor:
+        ax = plt.axes(projection='3d')
+    else:
+        ax = 0
     for i in range(N):
         parameters[param_code] = start + step*i
-        solve(parameters, initial_conditions, param_code, i, N)
+        solve(parameters, initial_conditions, param_code, i, N,ax,Attractor)
     plt.title("parameter: "+param_names(param_code))
     plt.legend(fancybox=True)
-    plt.savefig(save_loc+"parameter-"+param_names(param_code)+".png")
-    parameters = param_init()  ## reseting the parameters
-    print(parameters)     
-    
+    if saveflag:
+        if Attractor:
+            plt.savefig(save_loc+"parameter_attractor-"+param_names(param_code)+".png")
+        else:
+            plt.savefig(save_loc+"parameter-"+param_names(param_code)+".png")
+        parameters = param_init()  ## reseting the parameters
+    else:
+        plt.show()    
 if __name__ == '__main__':
     ## parameters
     #param_code = 1 ## th component of the parameter vector is changed
-    N = 8 ## constant that determines the range of search
+    N = 4 ## constant that determines the range of search
     save_flag = True
     
     for param_code in range(number_of_parameters):
