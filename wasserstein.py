@@ -4,8 +4,8 @@ from grid_search import param_init,param_names
 from solver import evolve
 import numpy as np
 import matplotlib.pyplot as plt
-from cmaes import CMA
 from scipy.optimize import minimize
+from scipy import integrate
 
 ### DATA ###
 smoothed = False ### flag for smoothing of the data
@@ -61,25 +61,46 @@ dp = parameters/2
 
 
 
-def will_be_optimized(arguments):
+def objective(arguments,data):
     
     parameters = param_init()
     parameters[0] = arguments[0]
     parameters[1] = arguments[1]
-    parameters[6] = arguments[2]
-    parameters[5] = arguments[3]
-    # parameters[8] = arguments[2]
-    cell_id = 81
+    parameters[5] = arguments[2]
+    parameters[6] = arguments[3]
+    
     time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters)
-    xx,yy,zz =data_to_embedding(data_matrix,cell_id,smoothed)
-    a = stats.wasserstein_distance(X,xx)
-    return a
+    
+    error = stats.wasserstein_distance(X,data)
+    print(error)
+    return error
 
+def objective2(arguments,data):
+    parameters = param_init()
+    parameters[0] = arguments[0]
+    parameters[1] = arguments[1]
+    parameters[2] = arguments[2]
+    parameters[3] = arguments[3]
+    parameters[4] = arguments[4]
+    parameters[5] = arguments[5]
+    parameters[6] = arguments[6]
+    parameters[7] = arguments[7]
+    parameters[8] = arguments[8]
+    parameters[9] = arguments[9]
+    parameters[10] = arguments[10]
+    parameters[11] = arguments[11]
+    parameters[12] = arguments[12]
+    parameters[13] = arguments[13]
+    time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters)
+
+    error = np.sum(np.square(X[::130]-data))
+    return error
 
 if __name__ == "__main__":
-    bnds = ((0, None), (0, None), (0, 5), (0, 5))
-    # initial = param_init()
-    #parameters = np.array([vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, k_ip3, k_p, k_deg, k_out, k_f, n, m])
-    result = minimize(will_be_optimized,[15,40,0.15,0.15], bounds=bnds)
+    bnds = [(0, None), (0, None), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5)]
+    cell_id = 81
+    xx,_,_ =data_to_embedding(data_matrix,cell_id,smoothed)
+    guess = param_init()
+    
+    result = minimize(objective2,guess,args=(xx,) ,bounds=bnds)
     print(result.x)
-    # res = minimize(fun,[0.15,0.15,0,3], method='SLSQP', bounds=bnds)

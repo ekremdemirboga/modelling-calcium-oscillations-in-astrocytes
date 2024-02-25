@@ -74,20 +74,20 @@ if __name__ == '__main__':
     ##Reproducing the results from https://www.sciencedirect.com/science/article/pii/S0022519307006510?via%3Dihub
     
     ## Constants 
-    vm2 = 15
-    vm3 = 40
-    v_in = 0.05
-    v_p = 0.05
-    k_2 = 0.1
-    k_CaA = 0.08980548 
-    k_CaI = 0.12632319
-    k_ip3 = 0.1
-    k_p = 0.3
-    k_deg = 0.08
-    k_out = 0.5
-    k_f = 0.5
-    n = 2.0
-    m = 2.2
+    vm2 = 14.9946156
+    vm3 = 40.00041033
+    v_in =  0.07785084
+    v_p = 0.10529221
+    k_2 = 0.11048502
+    k_CaA = 0.14011971
+    k_CaI = 0.17714941
+    k_ip3 = 0.25362738
+    k_p = 0.30131003
+    k_deg = 0.04634215
+    k_out = 0.50498358
+    k_f = 0.53237212
+    n = 1.98113914
+    m = 2.18635194
     parameters = np.array([vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, k_ip3, k_p, k_deg, k_out, k_f, n, m])
     
     #initial condition
