@@ -72,21 +72,35 @@ def evolve (t_initial, t_final, R, dt, parameters):
 if __name__ == '__main__':
     ##Reproducing the results from https://www.sciencedirect.com/science/article/pii/S0022519307006510?via%3Dihub
     
-
-    vm2 = 15/2.1 # fixed
-    vm3 = 40/3 # fixed
-    v_in =  0.051
-    v_p = 0.05
-    k_2 = 0.16
-    k_CaA = 1.9 #fixed
-    k_CaI = 0.15 #fixed
-    k_ip3 = 0.1
-    k_p = 0.3
-    k_deg = 0.08
-    k_out = 0.5 ## fixed
-    k_f = 0.5 
-    n = 2.02 #fixed
-    m = 2.2  #fixed 
+    vm2 = 17.09468415 # fixed
+    vm3 = 37.7829735 # fixed
+    v_in =  0.05407389
+    v_p = 0.04935203
+    k_2 = 0.10056325
+    k_CaA = 0.12951312 #fixed
+    k_CaI = 0.15137234 #fixed
+    k_ip3 = 0.10427675
+    k_p = 0.30103761
+    k_deg = 0.08090904
+    k_out = 0.42374174 ## fixed
+    k_f = 0.49716914
+    n = 2.11602813 #fixed
+    m = 2.19206961  #fixed 
+    
+    # vm2 = 15/2.1 # fixed
+    # vm3 = 40/3 # fixed
+    # v_in =  0.051
+    # v_p = 0.05
+    # k_2 = 0.16
+    # k_CaA = 1.9 #fixed
+    # k_CaI = 0.15 #fixed
+    # k_ip3 = 0.1
+    # k_p = 0.3
+    # k_deg = 0.08
+    # k_out = 0.5 ## fixed
+    # k_f = 0.5 
+    # n = 2.02 #fixed
+    # m = 2.2  #fixed 
     parameters = np.array([vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, k_ip3, k_p, k_deg, k_out, k_f, n, m])
     
     #initial condition

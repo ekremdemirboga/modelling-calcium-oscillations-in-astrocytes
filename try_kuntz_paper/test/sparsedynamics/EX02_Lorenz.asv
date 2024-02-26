@@ -15,7 +15,7 @@ embedding_dimension = 3;
 time_delay = 1;
 embedded_X = takens_embedding(X, embedding_dimension, time_delay);
 
-polyorder = 1;
+polyorder = 2;
 usesine = 0;
 n = 3;
 % sigma = 10;  % Lorenz's parameters (chaotic)
@@ -25,7 +25,7 @@ n = 3;
 % x0=[0.1; 1.5; 0.1];  % Initial condition
 
 % Integrate
-
+% tspan=[.001:.001:100];
 % N = length(tspan);
 % options = odeset('RelTol',1e-12,'AbsTol',1e-12*ones(1,n));
 % [t,x]=ode45(@(t,x) lorenz(t,x,sigma,beta,rho),tspan,x0,options);
@@ -38,8 +38,8 @@ n = 3;
 % disp(dx)
 % dx = dx + eps*randn(size(dx));
 dX = derv(embedded_X(:,1));%diff(embedded_X(:,1));
-dY = derv(embedded_X(:,2));%diff(embedded_X(:,2));
-dZ = derv(embedded_X(:,3));%diff(embedded_X(:,3));
+dY = derv(embedded_X(:,1));%diff(embedded_X(:,2));
+dZ = %diff(embedded_X(:,3));
 dx = [dX, dY, dZ];
 % embedded_X(end, :) = [];
 %% pool Data  (i.e., build library of nonlinear time series)
@@ -47,19 +47,9 @@ Theta = poolData(embedded_X,n,polyorder,usesine);
 m = size(Theta,2);
 
 %% compute Sparse regression: sequential least squares
-lambda = 0.005;      % lambda is our sparsification knob.
+lambda = 0.025;      % lambda is our sparsification knob.
 Xi = sparsifyDynamics(Theta,dx,lambda,n);
 poolDataLIST({'x','y','z'},Xi,n,polyorder,usesine);
-
-tspan=[.001:.001:300];
-x0=[0.1; 1.5; 0.1];
-options = odeset('RelTol',1e-12,'AbsTol',1e-12*ones(1,n));
-[tA,xA]=ode45(@(t,x)test(t,x,Xi),tspan,x0,options);   
-
-plot(tA, xA(:,1));
-xlabel('t');
-ylabel('x');
-
 
 %% FIGURE 1:  LORENZ for T\in[0,20]
 % tspan = [0 20];

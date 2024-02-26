@@ -6,6 +6,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.optimize import minimize
 from scipy import integrate
+import random
 
 ### DATA ###
 smoothed = True ### flag for smoothing of the data
@@ -18,8 +19,8 @@ xx,yy,zz =data_to_embedding(data_matrix,cell_id,smoothed) ## Taken's embedding o
 X0 = 0.1
 Y0 = 1.5
 Z0 = 0.1
-t_initial = 1
-t_final = 300
+t_initial = 0
+t_final = 299
 dt = 1/128
 R = np.array([X0,Y0,Z0]) # initial conditions
 parameters = param_init() # initial parameters 
@@ -96,11 +97,57 @@ def objective2(arguments,data):
     error = np.sum(np.square(X[::130]-data))
     return error
 
+
+
 if __name__ == "__main__":
     bnds = [(0, 1), (0, 1), (0, 1), (0,1), (0, 1), (0, 1), (0, 1)]
     cell_id = 81
     xx,_,_ =data_to_embedding(data_matrix,cell_id,smoothed)
-    guess = param_init()
-    guess = [0.05, 0.05, 0.1, 0.1, 0.3, 0.08, 0.5]
-    result = minimize(objective2,guess,args=(xx,),bounds=bnds)
-    print(result.x)
+    # guess = [0.05, 0.05, 0.1, 0.1, 0.3, 0.08, 0.5]
+    # result = minimize(objective2,guess,args=(xx,),bounds=bnds)
+    # print(result.x)
+    noise = (2*np.random.randint(0,2,size=(14,))-1)*np.random.uniform(0.001,0.2,(14,))
+    parameters = param_init()
+    dp = noise*parameters
+    parameters = parameters + dp
+    time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters)
+    error = np.sum(np.square(X[::130]-xx))
+    print(error)
+    tol = 1e-1
+    count = 0
+    while error>tol:
+        time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters)
+        error_new = np.sum(np.square(X[::130]-xx))
+        # print(error_new)
+        
+        if error < error_new:
+            parameters = parameters - dp
+            dp = (2*np.random.randint(0,2,size=(14,))-1)*np.random.uniform(0.001,0.2,(14,))*parameters
+            parameters = parameters + dp
+            count +=1
+            if count > 100:
+                dp = (2*np.random.randint(0,2,size=(14,))-1)*np.random.uniform(0.1,0.5,(14,))*parameters
+        else:
+            print(error_new)
+            dp = (2*np.random.randint(0,2,size=(14,))-1)*np.random.uniform(0.001,0.2,(14,))*parameters
+            parameters = parameters + dp
+            error = error_new
+            count = 0
+        if np.isnan(error):
+            parameters = parameters - dp
+            dp = (2*np.random.randint(0,2,size=(14,))-1)*np.random.uniform(0.001,0.5,(14,))*parameters
+            parameters = parameters + dp
+            error = 999
+            
+    print("error is: ", error)
+    print("parameters are: ", parameters)
+    time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters)
+    plt.figure()
+    plt.plot(time,X,'k',linewidth=3,label = 'X')
+    plt.xlabel(r"t", fontsize=14)
+    plt.ylabel(r"X", fontsize=14)
+    plt.grid(True)
+
+
+
+    plt.show()
