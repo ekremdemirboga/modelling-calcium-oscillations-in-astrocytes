@@ -10,6 +10,7 @@ addpath('./utils');
 %% generate Data
 load("traces.mat");
 X = traces(81, :)';
+X = smoothdata(X, 5);
 embedding_dimension = 3;
 time_delay = 1;
 embedded_X = takens_embedding(X, embedding_dimension, time_delay);
@@ -46,7 +47,7 @@ Theta = poolData(embedded_X,n,polyorder,usesine);
 m = size(Theta,2);
 
 %% compute Sparse regression: sequential least squares
-lambda = 0.025;      % lambda is our sparsification knob.
+lambda = 1;      % lambda is our sparsification knob.
 Xi = sparsifyDynamics(Theta,dx,lambda,n);
 poolDataLIST({'x','y','z'},Xi,n,polyorder,usesine);
 

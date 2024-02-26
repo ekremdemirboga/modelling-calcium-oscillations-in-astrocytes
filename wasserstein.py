@@ -8,7 +8,7 @@ from scipy.optimize import minimize
 from scipy import integrate
 
 ### DATA ###
-smoothed = False ### flag for smoothing of the data
+smoothed = True ### flag for smoothing of the data
 cell_id = 82 
 xx,yy,zz =data_to_embedding(data_matrix,cell_id,smoothed) ## Taken's embedding of the data
 
@@ -24,9 +24,9 @@ dt = 1/128
 R = np.array([X0,Y0,Z0]) # initial conditions
 parameters = param_init() # initial parameters 
 ## params = [vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, k_ip3, k_p, k_deg, k_out, k_f, n, m]
-N = 20 ## constant that determines the range of search
-number_of_parameters=14
-dp = parameters/2
+# N = 20 ## constant that determines the range of search
+# number_of_parameters=14
+# dp = parameters/2
 
 # time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters)
 # distance_old = stats.wasserstein_distance(X,xx)
@@ -77,30 +77,30 @@ def objective(arguments,data):
 
 def objective2(arguments,data):
     parameters = param_init()
-    parameters[0] = arguments[0]
-    parameters[1] = arguments[1]
-    parameters[2] = arguments[2]
-    parameters[3] = arguments[3]
-    parameters[4] = arguments[4]
-    parameters[5] = arguments[5]
-    parameters[6] = arguments[6]
-    parameters[7] = arguments[7]
-    parameters[8] = arguments[8]
-    parameters[9] = arguments[9]
-    parameters[10] = arguments[10]
-    parameters[11] = arguments[11]
-    parameters[12] = arguments[12]
-    parameters[13] = arguments[13]
+    # parameters[0] = arguments[0]
+    # parameters[1] = arguments[1]
+    parameters[2] = arguments[0]
+    parameters[3] = arguments[1]
+    parameters[4] = arguments[2]
+    # parameters[5] = arguments[5]
+    # parameters[6] = arguments[6]
+    parameters[7] = arguments[3]
+    parameters[8] = arguments[4]
+    parameters[9] = arguments[5]
+    # parameters[10] = arguments[10]
+    parameters[11] = arguments[6]
+    # parameters[12] = arguments[12]
+    # parameters[13] = arguments[13]
     time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters)
 
     error = np.sum(np.square(X[::130]-data))
     return error
 
 if __name__ == "__main__":
-    bnds = [(0, None), (0, None), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5), (0, 5)]
+    bnds = [(0, 1), (0, 1), (0, 1), (0,1), (0, 1), (0, 1), (0, 1)]
     cell_id = 81
     xx,_,_ =data_to_embedding(data_matrix,cell_id,smoothed)
     guess = param_init()
-    
-    result = minimize(objective2,guess,args=(xx,) ,bounds=bnds)
+    guess = [0.05, 0.05, 0.1, 0.1, 0.3, 0.08, 0.5]
+    result = minimize(objective2,guess,args=(xx,),bounds=bnds)
     print(result.x)
