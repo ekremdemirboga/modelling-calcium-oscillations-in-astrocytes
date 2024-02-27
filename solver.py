@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-def RHS(t,R,parameters):
+def RHS(t,R,parameters,noise = False):
     ## caclulates the RHS of the equation 28 in the https://www.sciencedirect.com/science/article/pii/S0022519307006510?via%3Dihub.
     # INPUTS 
     ## parameters: constants of the ODE
@@ -11,18 +11,19 @@ def RHS(t,R,parameters):
     # OUTPUTS 
     ## f = (f1, f2, f3) where
     ## f#'s are the RHS of the equation
-    
+      
     [vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, k_ip3, k_p, k_deg, k_out, k_f, n, m] = parameters
-    
+    if noise:
+        gaussian_noise = np.random.normal(0, 0.1)
+        v_in=v_in+gaussian_noise    
     X = R[0]
     Y = R[1]
     Z = R[2]
-    
     v_serca = (vm2 * X**2) / (X**2 + k_2 **2)    
     v_PLC = (v_p * X**2) / (X**2 + k_p **2) 
     v_CICR = 4*vm3*(k_CaA**n * X**n / ( (X**n + k_CaA**n)*(X**n + k_CaI**n) ) )*(Z**m/(Z**m + k_ip3**m))*(Y-X)
     
-    f1 = v_in - k_out*X + v_CICR - v_serca + k_f * (Y - X)
+    f1 = v_in- k_out*X + v_CICR - v_serca + k_f * (Y - X)
     f2 = v_serca - v_CICR - k_f * (Y- X)
     f3 = v_PLC - k_deg * Z
 
@@ -72,35 +73,35 @@ def evolve (t_initial, t_final, R, dt, parameters):
 if __name__ == '__main__':
     ##Reproducing the results from https://www.sciencedirect.com/science/article/pii/S0022519307006510?via%3Dihub
     
-    vm2 = 1.49220152e+01 # fixed
-    vm3 = 4.00284955e+01 # fixed
-    v_in =  1.45812502e-01
-    v_p = 2.97457176e-02
-    k_2 = 1.00000000e+00
-    k_CaA = 1.00000000e+00 #fixed
-    k_CaI = 0.00000000e+00 #fixed
-    k_ip3 = 0.00000000e+00
-    k_p = 0.00000000e+00
-    k_deg = 1.97720303e-01
-    k_out = 1.00000000e+00 ## fixed
-    k_f = 5.68966210e-01
-    n = 9.02164180e-01 #fixed
-    m = 7.78342758e-01  #fixed 
-    
-    # vm2 = 15/2.1 # fixed
-    # vm3 = 40/3 # fixed
-    # v_in =  0.051
+    # vm2 = 15
+    # vm3 = 40
+    # v_in = 0.05
     # v_p = 0.05
-    # k_2 = 0.16
-    # k_CaA = 1.9 #fixed
-    # k_CaI = 0.15 #fixed
+    # k_2 = 0.1
+    # k_CaA = 0.27
+    # k_CaI = 0.27
     # k_ip3 = 0.1
-    # k_p = 0.3
+    # k_p = 0.164
     # k_deg = 0.08
-    # k_out = 0.5 ## fixed
-    # k_f = 0.5 
-    # n = 2.02 #fixed
-    # m = 2.2  #fixed 
+    # k_out = 0.5
+    # k_f = 0.5
+    # n = 2.02
+    # m = 2.2
+    
+    vm2 = 15/2.1 # fixed
+    vm3 = 40/3 # fixed
+    v_in =  0.051
+    v_p = 0.05
+    k_2 = 0.16
+    k_CaA = 1.9 #fixed
+    k_CaI = 0.15 #fixed
+    k_ip3 = 0.1
+    k_p = 0.3
+    k_deg = 0.08
+    k_out = 0.5 ## fixed
+    k_f = 0.5 
+    n = 2.02 #fixed
+    m = 2.2  #fixed 
     parameters = np.array([vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, k_ip3, k_p, k_deg, k_out, k_f, n, m])
     
     #initial condition
