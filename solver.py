@@ -72,20 +72,20 @@ def evolve (t_initial, t_final, R, dt, parameters):
 if __name__ == '__main__':
     ##Reproducing the results from https://www.sciencedirect.com/science/article/pii/S0022519307006510?via%3Dihub
     
-    vm2 = 17.09468415 # fixed
-    vm3 = 37.7829735 # fixed
-    v_in =  0.05407389
-    v_p = 0.04935203
-    k_2 = 0.10056325
-    k_CaA = 0.12951312 #fixed
-    k_CaI = 0.15137234 #fixed
-    k_ip3 = 0.10427675
-    k_p = 0.30103761
-    k_deg = 0.08090904
-    k_out = 0.42374174 ## fixed
-    k_f = 0.49716914
-    n = 2.11602813 #fixed
-    m = 2.19206961  #fixed 
+    vm2 = 1.49220152e+01 # fixed
+    vm3 = 4.00284955e+01 # fixed
+    v_in =  1.45812502e-01
+    v_p = 2.97457176e-02
+    k_2 = 1.00000000e+00
+    k_CaA = 1.00000000e+00 #fixed
+    k_CaI = 0.00000000e+00 #fixed
+    k_ip3 = 0.00000000e+00
+    k_p = 0.00000000e+00
+    k_deg = 1.97720303e-01
+    k_out = 1.00000000e+00 ## fixed
+    k_f = 5.68966210e-01
+    n = 9.02164180e-01 #fixed
+    m = 7.78342758e-01  #fixed 
     
     # vm2 = 15/2.1 # fixed
     # vm3 = 40/3 # fixed

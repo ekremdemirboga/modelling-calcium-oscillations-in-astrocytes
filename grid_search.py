@@ -95,6 +95,25 @@ def param_init():
               k_ip3, k_p, k_deg, k_out, k_f, n, m]
     return np.asarray(params)
 
+def param_init2():
+    vm2 = 15/2.1
+    vm3 = 40/3 
+    v_in =  0.051
+    v_p = 0.05
+    k_2 = 0.16
+    k_CaA = 1.9 
+    k_CaI = 0.15 
+    k_ip3 = 0.1
+    k_p = 0.3
+    k_deg = 0.08
+    k_out = 0.5
+    k_f = 0.5 
+    n = 2.02 
+    m = 2.2  
+    params = [vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, 
+              k_ip3, k_p, k_deg, k_out, k_f, n, m]
+    return np.asarray(params)
+
 def grid_search(param_code,N,saveflag=True):
     ## Makes a grid search for the parameter given by param_names(param_code)
     # limits of search of parameters
