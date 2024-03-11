@@ -2,10 +2,10 @@
 -check convergence
 
 1- use curve fit to fit single peaks
-2- takens embedding+wassertein distance+optimize.
+2- takens embedding --> wassertein distance --> optimize.
 
 question:
-1- this model made under the assumption that the ocillations occur spontenously. 
+1- This model made under the assumption that the ocillations occur spontenously. 
 Is this the case in the experiment?
 2- from the paper " In many of the astrocytes that display spontaneous activity, the time
 between spikes tends to be longer than 100"

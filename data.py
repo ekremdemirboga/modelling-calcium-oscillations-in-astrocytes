@@ -12,7 +12,7 @@ def smooth(y, box_pts):
 
 
 def takensEmbedding (data, delay, dimension):
-    "This function returns the Takens embedding of data with delay into dimension, delay*dimension must be < len(data)"
+    #This function returns the Takens embedding of data with delay into dimension, delay*dimension must be < len(data)
     if delay*dimension > len(data):
         raise NameError('Delay times dimension exceed length of data!')    
     embeddedData = np.array([data[0:len(data)-delay*dimension]])
@@ -22,7 +22,7 @@ def takensEmbedding (data, delay, dimension):
 
 
 def mutualInformation(data, delay, nBins):
-    "This function calculates the mutual information given the delay"
+    #This function calculates the mutual information given the delay
     I = 0
     xmax = max(data)
     xmin = min(data)
