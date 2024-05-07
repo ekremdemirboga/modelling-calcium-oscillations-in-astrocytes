@@ -51,7 +51,7 @@ def mutualInformation(data, delay, nBins):
 
 def data_to_embedding(data_matrix, ith_cell,smoothed=False):
     X_data = data_matrix[ith_cell]
-    embedded_data = takensEmbedding(X_data,1,3)
+    embedded_data = takensEmbedding(X_data,5,3)
     X = embedded_data[0,:]
     Y = embedded_data[1,:]
     Z = embedded_data[2,:]
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     save = False
     smoothed = True
     mutual_info_test = False
-    ith_cell = 82
+    ith_cell = 71
 
 
     if attractor:

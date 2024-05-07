@@ -1,0 +1,5 @@
+giriş biyoloji kısmı
+curvefitting denemeleri ve zorlukları
+takens embedding denemeleri ve zorlukları
+kuntz paper yapılabilir --- future directions
+conclusion
