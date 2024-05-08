@@ -4,10 +4,12 @@ from scipy.optimize import curve_fit
 from data import data_matrix,data_to_embedding
 from grid_search import param_init2,initial_conditions
 from solver import evolve
-def func(time,k_CaI):
+def func(time,k_CaI,k_CaA):
     parameters = param_init2()
     parameters[5] = k_CaI
-    # parameters[6] = k_CaA
+    parameters[6] = k_CaA
+    # parameters[7] = k_p
+    # parameters[8] = k_2
     R = initial_conditions
     #simulation parameters
     t_initial = 1
