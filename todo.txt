@@ -9,3 +9,7 @@ question:
 Is this the case in the experiment?
 2- from the paper " In many of the astrocytes that display spontaneous activity, the time
 between spikes tends to be longer than 100"
+
+
+conclusions:
+we need high values of Y, around ~4,5 to initate an ocillation

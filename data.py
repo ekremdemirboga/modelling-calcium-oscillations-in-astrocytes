@@ -2,12 +2,19 @@ import scipy.io
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+from scipy.interpolate import CubicSpline
+
 mat_file = scipy.io.loadmat('traces.mat')
 data_matrix = mat_file["traces"]
 
-def smooth(y, box_pts):
+def smooth(y, box_pts=3,interpolate=True):
+    ### make the data smoothed. box_pts measures the level of smoothness. if interpolate = 1, then uses cubic spline to interpolate as well.
     box = np.ones(box_pts)/box_pts
     y_smooth = np.convolve(y, box, mode='same')
+    if interpolate:
+        t = np.arange(1,600+1/128,1/128)
+        y_smooth_interpolated = CubicSpline(range(len(y)),y_smooth)
+        return y_smooth_interpolated(t)
     return y_smooth
 
 
@@ -62,7 +69,7 @@ def data_to_embedding(data_matrix, ith_cell,smoothed=False):
     return X,Y,Z
 
 if __name__ == '__main__':
-    attractor = True
+    attractor = False
     save = False
     smoothed = True
     mutual_info_test = False
@@ -93,18 +100,18 @@ if __name__ == '__main__':
             plt.show()
 
     else:
-        for i in range(1):
-            i = ith_cell
+        for i in range(82):
+            # i = ith_cell
             X = data_matrix[i]
             if smoothed:
-                X = smooth(X,10)
+                X = smooth(X,box_pts=2, interpolate=True)
             plt.figure()
             plt.plot(X,'k',linewidth=3,label = 'X')
             plt.xlabel(r"t", fontsize=14)
             plt.ylabel(r"X", fontsize=14)
             plt.grid(True)
             if save:
-                plt.savefig("cell_"+str(i)+"_smoothed.png")
+                plt.savefig("/data_smooth/cell_"+str(i)+"_smoothed.png")
                 plt.close()
             else:
                 plt.show()  
