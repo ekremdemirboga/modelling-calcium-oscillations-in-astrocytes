@@ -89,7 +89,7 @@ def compare_plots():
     plt.show()
     
 
-X_data = data_matrix[ith_cell][60:106]
+X_data = data_matrix[ith_cell][200:246]
 X_data_smoothed = smooth(X_data,box_pts=2,interpolate=False)
 X_data_interpolated = CubicSpline(np.arange(len(X_data_smoothed)),X_data_smoothed)
 t_data = np.arange(len(X_data))
