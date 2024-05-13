@@ -3,3 +3,7 @@ curvefitting denemeleri ve zorlukları
 takens embedding denemeleri ve zorlukları
 kuntz paper yapılabilir --- future directions
 conclusion
+
+https://sci-hub.ru/https://pubmed.ncbi.nlm.nih.gov/22262535/
+https://pubmed.ncbi.nlm.nih.gov/22262535/
+https://www.scopus.com/record/display.uri?eid=2-s2.0-72249105608&origin=resultslist&sort=plf-f&cite=2-s2.0-41049095967&src=s&nlo=&nlr=&nls=&imp=t&sid=1827adb4fc2769a2969ff164830c2679&sot=cite&sdt=a&sl=0&relpos=61&citeCnt=44&searchTerm=
