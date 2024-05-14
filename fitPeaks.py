@@ -9,6 +9,31 @@ from scipy.optimize import curve_fit
 
 ith_cell=73
 
+def test_func(time,vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, k_ip3, k_p, k_deg, k_out, k_f, n, m):
+    parameters = param_init_peak()
+    parameters[5] = k_CaA
+    parameters[6] = k_CaI
+    parameters[0] = vm2
+    parameters[1] = vm3
+    parameters[8] = k_p
+    parameters[11] = k_f
+    parameters[9] = k_deg
+    parameters[7] = k_ip3
+    #
+    parameters[2] = v_in 
+    parameters[3] = v_p
+    parameters[4] = k_2
+    parameters[10] = k_out
+    parameters[12] = n
+    parameters[13] = m
+
+    initial_conditions = [0.1,4.9,0.01]
+    t_initial = 0
+    t_final = 300
+    dt = 1/128
+    t,X,_,_ = evolve(t_initial, t_final, initial_conditions, dt, parameters)
+    interpolated = CubicSpline(t,X)
+    return interpolated(time)
 
 def param_init_peak():
     # vm2 = 0.553
@@ -89,7 +114,7 @@ def compare_plots():
     plt.show()
     
 
-X_data = data_matrix[ith_cell][200:246]
+X_data = data_matrix[ith_cell][60:106]
 X_data_smoothed = smooth(X_data,box_pts=2,interpolate=False)
 X_data_interpolated = CubicSpline(np.arange(len(X_data_smoothed)),X_data_smoothed)
 t_data = np.arange(len(X_data))
@@ -115,4 +140,18 @@ plt.plot(t_data, objective_func(t_data, *popt), 'r--',
 plt.plot( t_data,X_data_interpolated(t_data),'k',linewidth=3,label = 'data')
 plt.grid(True)
 plt.legend(fancybox=True)
+plt.show()
+
+
+print("plotting the for longer time")
+print(*popt)
+
+X_data2 = data_matrix[ith_cell]
+X_data_smoothed2 = smooth(X_data2,box_pts=2,interpolate=False)
+X_data_interpolated2 = CubicSpline(np.arange(len(X_data_smoothed2)),X_data_smoothed2)
+t_data2 = np.arange(len(X_data2))
+X_data_interpolated2(t_data2)[X_data_interpolated2(t_data2) < 0] = 0
+plt.plot(t_data2, test_func(t_data2, *popt), 'r--')
+plt.plot( t_data2,X_data_interpolated2(t_data2),'k',linewidth=3,label = 'data')
+plt.grid(True)
 plt.show()

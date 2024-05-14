@@ -112,22 +112,22 @@ if __name__ == '__main__':
     # n = 2.02
     # m = 2.2
     
-    vm2 = 14.735 # fixed
-    vm3 = 42.271 # fixed
-    v_in =  0.01
-    v_p = 0.011
-    k_2 = 0.048
-    k_CaA = 0.331 #fixed
-    k_CaI = 0.056 #fixed
-    k_ip3 = 0.071
-    k_p = 0.311
-    k_deg = 0.01
-    k_out = 0.530 ## fixed
-    k_f = 0.370 ##11
-    n = 2.179 #fixed
-    m = 2.158  #fixed 
-    parameters = np.array([vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, k_ip3, k_p, k_deg, k_out, k_f, n, m])
-    # parameters = param_init()
+    vm2 = 14.73473573752892 # fixed
+    vm3 = 42.27124247928102 # fixed
+    v_in =  0.010000000006538988
+    v_p = 0.011020778109060726
+    k_2 = 0.04833079640985642
+    k_CaA = 0.33137470492398174 #fixed
+    k_CaI = 0.05554903743145177 #fixed
+    k_ip3 = 0.07052629389235288
+    k_p = 0.31123713910093365
+    k_deg = 0.010000161695752763
+    k_out = 0.5303514867643699 ## fixed
+    k_f = 0.36990349669220096 ##11
+    n = 2.1787746328706192 #fixed
+    m = 2.158006702188488  #fixed 
+    # parameters = np.array([vm2, vm3, v_in, v_p, k_2, k_CaA, k_CaI, k_ip3, k_p, k_deg, k_out, k_f, n, m])
+    parameters = param_init()
     #initial condition
     X0 = 0.1
     Y0 = 4.9
@@ -138,25 +138,25 @@ if __name__ == '__main__':
 
     #parameters
     t_initial = 0
-    t_final = 600
+    t_final = 300
     dt = 1/128
-    noise = True
+    noise = False
     #main part
     time,X,Y,Z = evolve(t_initial, t_final, R, dt, parameters,noise)
 
     #plotting 
     plt.figure()
     plt.plot(time,X,'k',linewidth=3,label = 'X')
-    plt.plot(time,Y,'r',linewidth=3,label = 'Y')
-    plt.plot(time,Z,'g',linewidth=3,label = 'Z')
+    # plt.plot(time,Y,'r',linewidth=3,label = 'Y')
+    # plt.plot(time,Z,'g',linewidth=3,label = 'Z')
     plt.xlabel(r"t", fontsize=14)
     plt.ylabel(r"X", fontsize=14)
     plt.grid(True)
-    plt.legend(fancybox=True)
+    # plt.legend(fancybox=True)
 
-    # plt.figure()
-    # ax = plt.axes(projection='3d')
-    # ax.plot3D(X, Y, Z, 'green')
+    plt.figure()
+    ax = plt.axes(projection='3d')
+    ax.plot3D(X, Y, Z, 'black')
 
 
     plt.show()

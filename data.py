@@ -69,11 +69,11 @@ def data_to_embedding(data_matrix, ith_cell,smoothed=False):
     return X,Y,Z
 
 if __name__ == '__main__':
-    attractor = False
+    attractor = True
     save = False
-    smoothed = True
+    smoothed = False
     mutual_info_test = False
-    ith_cell = 71
+    ith_cell = 73
 
 
     if attractor:
@@ -91,7 +91,7 @@ if __name__ == '__main__':
         else:
             plt.figure()
             ax = plt.axes(projection='3d')
-            ax.plot3D(X, Y, Z, color = 'red',label = str(ith_cell))
+            ax.plot3D(X, Y, Z, color = 'black',label = str(ith_cell))
             ax.set_xlabel('x', fontsize=12)
             ax.set_ylabel('y', fontsize=12)
             ax.set_zlabel('z', fontsize=12)
@@ -100,11 +100,11 @@ if __name__ == '__main__':
             plt.show()
 
     else:
-        for i in range(82):
-            # i = ith_cell
+        for i in range(1):
+            i = ith_cell
             X = data_matrix[i]
             if smoothed:
-                X = smooth(X,box_pts=2, interpolate=True)
+                X = smooth(X,box_pts=2, interpolate=False)
             plt.figure()
             plt.plot(X,'k',linewidth=3,label = 'X')
             plt.xlabel(r"t", fontsize=14)
